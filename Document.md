@@ -71,3 +71,43 @@ Static Pods:
 Scheduler :
     Default Scheduler Name : default-scheduler
     Customer Scheduler Name : my-custom-scheduler
+
+Metrics Server - In Memory monitoring solution, it runs a subcomponent under kubelet with named c-advisor.
+
+Different STATUS in Kubernetes get command
+    Running
+    Completed
+    ImagePullBackOff
+    CrashLoopBackOff
+    Pending
+    Init
+    Failed
+    terminated
+    Waiting
+
+Multi-Container Pod :
+    Ambassador - Backend connection is written in this container and main container will connect on localhost to ambassador container
+    Adaptor - Convert the logs into required format
+    SideCar - Send multiple application logs to Destination
+
+Cluster Maintenance :
+    OS Upgrade :
+        #kubectl drain node01 --ignore-daemonsets
+        UPGRADE + RESTART THE OS PATCHES
+        #kubectl uncordon node01
+
+    Cluster Upgrade :
+        Release version - 1.11.3
+        1 = Major
+        11 = Minor
+        3 = Patch
+        
+        Kubernetes support last 3 minor version support.
+
+        Kubernetes Version :
+        kube-apiserver      x
+        controller manager  x, x-1
+        kube-scheduler      x, x-1
+        kubelet             x, x-1, x-2
+        kube-proxy          x, x-1, x-2
+        kubectl             x-1, x, x+1

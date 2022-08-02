@@ -57,5 +57,51 @@
 #kubectl get pods --selector app=nginx
 #kubectl label node gke-cluster-1-default-pool-bfa03019-p5mj size=large
 
+## MONITOR K8S
+#kubectl top nodes
+#kubectl top pods
+#kubectl logs -f nginx 
+#kubectl logs -f --selector app=nginx
+
+## CONFIGMAP COMMANDS
+#kubectl create configmap app-configmap --from-literal=color=blue --from-literal=env=test
+
 ## DOCKER REGISTRY SECRET OBJECT CREATION
+#kubectl create secret generic app-secret --from-literal=color=red --from-literal=env=prod
 #kubectl create secret docker-registry regcred --docker-server=docker.io --docker-username=achordia --docker-password=Hello@123 --docker-email=email.abhishekchordia@gmail.com
+
+## CLUSTER UPGRADE PROCESS
+The upgrade workflow at high level is the following:
+    Upgrade a primary control plane node.
+    Upgrade additional control plane nodes.
+    Upgrade worker nodes.
+
+### MASTER NODE
+#apt-mark unhold kubeadm && \
+#apt-get update && apt-get install -y kubeadm=1.24.x-00 && \
+#apt-mark hold kubeadm
+#kubeadm version
+#kubeadm upgrade plan
+#sudo kubeadm upgrade apply v1.24.x
+#kubectl drain <node-to-drain> --ignore-daemonsets
+#apt-mark unhold kubelet kubectl && \
+#apt-get update && apt-get install -y kubelet=1.24.x-00 kubectl=1.24.x-00 && \
+#apt-mark hold kubelet kubectl
+#sudo systemctl daemon-reload
+#sudo systemctl restart kubelet
+#kubectl uncordon <node-to-drain>
+#kubectl get nodes
+
+
+### WORKER NODE
+#apt-mark unhold kubeadm && \
+#apt-get update && apt-get install -y kubeadm=1.24.x-00 && \
+#apt-mark hold kubeadm
+#sudo kubeadm upgrade node
+#kubectl drain <node-to-drain> --ignore-daemonsets    //** RUN FROM MASTER NODE
+#apt-mark unhold kubelet kubectl && \
+#apt-get update && apt-get install -y kubelet=1.24.x-00 kubectl=1.24.x-00 && \
+#apt-mark hold kubelet kubectl
+#sudo systemctl daemon-reload
+#sudo systemctl restart kubelet
+#kubectl uncordon <node-to-drain>                   //** RUN FROM MASTER NODE
